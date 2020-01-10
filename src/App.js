@@ -18,10 +18,7 @@ const App = () => {
 
   useEffect(() => {
     const localUser = localStorage.getItem('loggedUser');
-    if (!localUser) {
-      localStorage.setItem('loggedUser', {});
-    } 
-    else {
+    if (localUser) {
       if (!loggedInUser || !Object.keys(loggedInUser).length) {
         setLoggedInUser(JSON.parse(localUser));
       }

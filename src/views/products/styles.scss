@@ -8,24 +8,11 @@
     top: 0;
     right: 0;
   }
-  .MuiPaper-root {
-    z-index: -100;
-    margin-top: 50px;
-    width: 90%;
-    margin-left: 5%;
-  }
-  .MuiToolbar-root {
-    .MuiFormControl-root {
-      display: none;
+
+  .react-grid-Container {
+    margin-top: 40px;
+    .react-grid-Main {
+
     }
-    .MTableToolbar-actions-36 {
-      display: none;
-    }
-  }
-  .MuiToolbar-root {
-    min-height: 1px;
-  }
-  .MuiTablePagination-toolbar {
-    display: none;
   }
 }
