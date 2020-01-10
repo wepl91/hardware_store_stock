@@ -3,7 +3,6 @@ import { Dialog } from "@blueprintjs/core";
 import './styles.scss';
 
 const Modal = (props) => {
-  debugger
   return (
     <Dialog isOpen={props.isOpen}>
       <div class="bp3-dialog-header">

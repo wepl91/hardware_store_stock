@@ -1,0 +1,43 @@
+@import "~normalize.css";
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+
+.bp3-html-table {
+  margin-top: 50px;
+}
+
+.table-row {
+  display: flex;
+  align-items: flex-end;
+  min-height: 52px;
+  &.dark {
+    background-color: #EAECEE;
+  }
+
+  &.header {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    background-color: #D0DFE9;
+    border-color: #AED7F3;
+  }
+
+  .table-column-cell {
+    display: flex;
+    flex-direction: column;
+    min-height: 52px;
+    justify-content: center;
+    &.right {
+      align-items: flex-end;
+    }
+
+    &.left {
+      align-items: flex-start;
+    }
+    
+    &.center {
+      align-items: center;
+    }
+
+  }
+}

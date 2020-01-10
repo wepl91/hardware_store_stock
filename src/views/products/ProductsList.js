@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 import { Text, H2, Button } from "@blueprintjs/core";
-import ReactDataGrid from 'react-data-grid';
 import Modal from '../../components/modal';
+import {products} from '../../mocks';
+import Table from '../../components/table';
 import './styles.scss'
 
 const ProductsList = (props) => {
@@ -12,41 +13,48 @@ const ProductsList = (props) => {
   const onClickNewProd = (props) => {
     props.history.push(`${props.history.location.pathname}/new`)
   }
-  
-  const columns = [
-    { key: 'id', name: 'ID' },
-    { key: 'title', name: 'Title' },
-    { key: 'count', name: 'Count' },
-    { key: 'action', name: 'Actions' }];
 
-  const rows = [
-    { id: 0, title: 'row1', count: 20 }, { id: 1, title: 'row1', count: 40 }, { id: 2, title: 'row1', count: 60 },
-    { id: 3, title: 'row1', count: 80 }, { id: 4, title: 'row1', count: 100 }, { id: 5, title: 'row1', count: 120 },
-    { id: 6, title: 'row1', count: 140 }, { id: 7, title: 'row1', count: 160 }, { id: 8, title: 'row1', count: 180 },
-  ];
-  const actions = (setShowDialog, setSelectedRow, row) => {
-    return [
-      {
-        icon: <Button className="bp3-minimal" icon="delete" text="" intent="primary" />,
-        callback: () => {
-          setShowDialog(true);
-          setSelectedRow(row);
-        }
-      },
-    ];
-  } 
-
-  const getCellActions = (column, row, setShowDialog, setSelectedRow) => {
-    const cellActions = {
-      action: actions(setShowDialog, setSelectedRow, row)
-    };
-    return cellActions[column.key];
+  const onClickDetails = (setShowDialog, setSelectedRow, data) => {
+    setShowDialog(true);
+    setSelectedRow(data);
   }
 
+    
   const closeDialog = (setShowDialog, setSelectedRow) => {
     setShowDialog(false);
     setSelectedRow(null);
   }
+  
+  const columns = (setShowDialog, setSelectedRow) =>  [
+    { 
+      label: 'ID',
+      content: (data) => `${data.id}`,
+    },
+    { 
+      label: 'Nombre',
+      content: (data) => data.name,
+    },
+    { 
+      label: 'Descripción',
+      content: (data) => data.description,
+    },
+    { 
+      label: 'Proveedores',
+      content: (data) => data.providers.map(provider => provider),
+    },
+    { 
+      label: 'Precio',
+      content: (data) => `$${data.price}`,
+      align: 'center'
+    },
+    { 
+      label: '',
+      content: (data) => <Button className="bp3-minimal" icon="plus" onClick={() => onClickDetails(setShowDialog, setSelectedRow, data)} intent="primary" />,
+      align: 'right',
+    },
+  ];
+  
+  const rows = products;
 
   return (
     <div className="product-list-container">
@@ -56,17 +64,13 @@ const ProductsList = (props) => {
         text="Nuevo producto"
         intent="primary"
         onClick={() => onClickNewProd(props)} />
-      <ReactDataGrid
-        columns={columns}
-        rowGetter={i => rows[i]}
-        getCellActions={(col, row) => getCellActions(col, row, setShowDialog, setSelectedRow)}
-        rowsCount={rows.length} />
+      <Table columns={columns(setShowDialog, setSelectedRow)} data={rows} />
       <Modal
         key={showDialog}
         isOpen={showDialog}
         onClose={() => closeDialog(setShowDialog, setSelectedRow)}
         title="Detalle de producto"
-        content={selectedRow && <Text>{`El producto seleccionado es el id ${selectedRow.id}`}</Text>}
+        content={selectedRow && <Text>{`El producto seleccionado es ${JSON.stringify(selectedRow, 2,2)}`}</Text>}
       />
     </div>
   )
