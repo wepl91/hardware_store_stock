@@ -41,3 +41,38 @@
     transform: rotate(360deg);
   }
 }
+
+// New style
+.menu-button-container {
+  width: 125px;
+}
+
+.menu-options-container {
+  padding-top: 70px;
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  align-items: flex-start;
+
+  .bp3-button {
+    margin-left: 10px;
+    margin-bottom: 25px;
+  }
+}
+
+.navbar-actions-container {
+  position: relative;
+  .search-input {
+      margin-left: 30px;
+      width: 300px;
+  }
+}
+
+.bp3-navbar {
+  position: relative;
+  .logout-container {
+    position: absolute;
+    right: 25px;
+    top:10px;
+  }
+}
