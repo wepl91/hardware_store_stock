@@ -1,0 +1,33 @@
+@import "~normalize.css";
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  padding-left: 30%;
+  padding-right: 30%;
+  margin-top: 30vh;
+
+  .user-input {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 5%;
+    width: 90%;
+  }
+  .password-input {
+    margin-bottom: 15px;
+    margin-left: 5%;
+    width: 90%;
+  }
+
+  .sign-in-card {
+    position: relative;
+    padding-bottom: 50px;
+    .bp3-button {
+      position: absolute;
+      right: 8%;
+      bottom: 15px;
+    }
+  }
+}

@@ -1,44 +1,64 @@
-import React, { useState } from 'react';
-import Sidebar from "react-sidebar";
-import { Button, Navbar } from "@blueprintjs/core";
+import React, { useState, Suspense, useEffect } from 'react';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { Spinner } from "@blueprintjs/core";
+import { UserContext } from './contexts/user-context';
 import './App.scss';
 
+import AppRouter from './routers/AppRouter';
+import SessionRouter from './routers/SessionRouter';
+
+const loader = <Spinner />
+const storeUser = (user, setLoggedInUser) => {
+  localStorage.setItem('loggedUser', JSON.stringify(user));
+  setLoggedInUser(user);
+}
 const App = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  return (
-    <Sidebar
-      sidebar={
-        <div className="menu-options-container">
-          <Button className="bp3-minimal" icon="cog" text="Productos" intent="primary" />
-          <Button className="bp3-minimal" icon="list-detail-view" text="Ventas" intent="primary" />
-        </div>
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const localUser = localStorage.getItem('loggedUser');
+    if (!localUser) {
+      localStorage.setItem('loggedUser', {});
+    } 
+    else {
+      if (!loggedInUser || !Object.keys(loggedInUser).length) {
+        setLoggedInUser(JSON.parse(localUser));
       }
-      open={menuOpen}
-      onSetOpen={() => setMenuOpen(!menuOpen)}
-      styles={{ sidebar: { background: "white" } }}
-    >
-      <Navbar>
-        <Navbar.Group>
-          <div className="menu-button-container">
-            <Button
-              className="bp3-minimal"
-              icon={menuOpen ? 'menu-closed' : 'menu-open'}
-              onClick={() => setMenuOpen(!menuOpen)} />
-          </div>
-          <Navbar.Divider />
-          <div className="navbar-actions-container">
-            <div class="bp3-input-group .modifier search-input">
-              <span class="bp3-icon bp3-icon-search"></span>
-              <input class="bp3-input" type="search" placeholder="Buscar" dir="auto" />
-            </div>
-          </div>
-        </Navbar.Group>
-        <div className="logout-container">
-          <Button className="bp3-minimal" icon="log-out" />
-        </div>
-      </Navbar>
-    </Sidebar>
-  );
+    }
+    setIsLoading(false);
+  });
+  
+  return (
+    <div>
+      <UserContext.Provider value={loggedInUser}>
+        <Suspense fallback={loader}>
+          {isLoading ? loader :
+            <BrowserRouter>
+              <Switch>
+                <Route 
+                  path={'/app'} 
+                  component={() =>
+                      <UserContext.Consumer>
+                        {context => ( <AppRouter loggedInUser={context} onSignOut={() => storeUser(null, setLoggedInUser)} /> )}
+                      </UserContext.Consumer>} />
+                <Route 
+                  path={'/session'} 
+                  component={() =>
+                    <UserContext.Consumer>
+                      {context => ( <SessionRouter loggedInUser={context} onSignIn={(user) => storeUser(user, setLoggedInUser)} /> )}
+                    </UserContext.Consumer>} />
+                <Redirect 
+                  to={'/app'} 
+                  component={() => 
+                      <UserContext.Consumer>
+                      {context => ( <AppRouter loggedInUser={context} onSignOut={() => storeUser(null, setLoggedInUser)} /> )}
+                      </UserContext.Consumer> } />
+              </Switch>
+            </BrowserRouter>}
+        </Suspense>
+      </UserContext.Provider>
+    </div>);
 }
 
 export default App;
