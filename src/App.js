@@ -1,25 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Sidebar from "react-sidebar";
+import { Button, Navbar } from "@blueprintjs/core";
+import './App.scss';
 
-function App() {
+const App = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Sidebar
+      sidebar={<b>Sidebar content</b>}
+      open={menuOpen}
+      onSetOpen={() => setMenuOpen(!menuOpen)}
+      styles={{ sidebar: { background: "white" } }}
+    >
+      <Navbar>
+        <Navbar.Group>
+          <Navbar.Heading>Blueprint</Navbar.Heading>
+          <Navbar.Divider />
+          <Button className="bp3-minimal" icon="home" text="Home" />
+          <Button className="bp3-minimal" icon="document" text="Files" />
+        </Navbar.Group>
+      </Navbar>
+    </Sidebar>
   );
 }
 
