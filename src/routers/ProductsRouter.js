@@ -10,22 +10,11 @@ const ProductsRouter = (props) => {
   const path = props.match.path;
   const location = props.location;
   return (
-    <TransitionGroup className="transition-group">
-      <CSSTransition
-        key={location.pathname}
-        timeout={300}
-        classNames="sectionTransition">
-        <section className="transition-wrapper">
-          <Switch location={location}>
-            <Route path={`${path}/products/list`} component={ProductsList} />
-            <Route path={`${path}/products/new`} component={ProductCreate} />
-            <Route path={`${path}/products`} component={ProductsList} />
-          </Switch>
-        </section>
-      </CSSTransition>
-    </TransitionGroup>
-
-  )
+    <Switch location={location}>
+      <Route path={`${path}/products/list`} component={ProductsList} />
+      <Route path={`${path}/products/new`} component={ProductCreate} />
+      <Route path={`${path}/products`} component={ProductsList} />
+    </Switch>)
 
 
 
