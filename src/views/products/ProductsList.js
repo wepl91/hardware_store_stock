@@ -1,15 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router';
-import { Text, H2, Button } from "@blueprintjs/core";
+import { Text, H2, Button, Spinner } from "@blueprintjs/core";
 import Modal from '../../components/modal';
-import {products} from '../../mocks';
 import Table from '../../components/table';
-import './styles.scss'
+import fire from '../../fire';
+import ProductDetails from './ProductDetails';
+import './styles.scss';
 
 const ProductsList = (props) => {
   const [showDialog, setShowDialog] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [products, setProducts] = useState(null);
   
+  const getProduct = (setProducts, setIsLoading) => {
+    fire.collection('products').get().then(snapshot => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+        return;
+      }
+
+      let prods = [];
+      snapshot.forEach(doc => {
+        debugger
+        let prod = Object.assign({}, doc.data(), {id: doc.id})
+        prods.push(prod);
+      });
+      setProducts(prods)
+      setIsLoading(false)
+    });
+  }
+  
+  useEffect(() => {
+    if (!products) {
+      getProduct(setProducts, setIsLoading);
+    }
+  })
+
   const onClickNewProd = (props) => {
     props.history.push(`${props.history.location.pathname}/new`)
   }
@@ -27,24 +54,20 @@ const ProductsList = (props) => {
   
   const columns = (setShowDialog, setSelectedRow) =>  [
     { 
-      label: 'ID',
-      content: (data) => `${data.id}`,
+      label: 'Referencia',
+      content: (data) => `${data.reference}`,
     },
     { 
       label: 'Nombre',
-      content: (data) => data.name,
+      content: (data) => data.name || '-',
     },
     { 
       label: 'Descripción',
-      content: (data) => data.description,
-    },
-    { 
-      label: 'Proveedores',
-      content: (data) => data.providers.map(provider => provider),
+      content: (data) => data.description || '-',
     },
     { 
       label: 'Precio',
-      content: (data) => `$${data.price}`,
+      content: (data) => data.price ? `$${data.price}` : '-',
       align: 'center'
     },
     { 
@@ -59,7 +82,7 @@ const ProductsList = (props) => {
     },
   ];
 
-  return (
+  return isLoading ? <Spinner /> : 
     <div className="product-list-container">
       <H2><Text>Listado de productos</Text></H2>
       <Button
@@ -74,10 +97,9 @@ const ProductsList = (props) => {
         isOpen={showDialog}
         onClose={() => closeDialog(setShowDialog, setSelectedRow)}
         title="Detalle de producto"
-        content={selectedRow && <Text>{`El producto seleccionado es ${JSON.stringify(selectedRow, 2,2)}`}</Text>}
+        content={<ProductDetails product={selectedRow}/>}
       />
     </div>
-  )
 }
 
 export default withRouter(ProductsList);
