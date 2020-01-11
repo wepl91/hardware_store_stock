@@ -22,7 +22,6 @@ const ProductsList = (props) => {
 
       let prods = [];
       snapshot.forEach(doc => {
-        debugger
         let prod = Object.assign({}, doc.data(), {id: doc.id})
         prods.push(prod);
       });
