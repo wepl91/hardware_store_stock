@@ -9,6 +9,7 @@ import './styles.scss';
 
 const AppRouter = (props) => {
   const [menuOpen, setMenuOpen] = useState(false);
+
   return props.loggedInUser && Object.keys(props.loggedInUser).length ? //Check loggedInUser
     <Sidebar
       sidebar={ <MenuContent onChange={() => setMenuOpen(!menuOpen)}/>}

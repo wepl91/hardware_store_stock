@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import ProductsList from '../views/products/ProductsList';
+import ProductCreate from '../views/products/ProductCreate'
 import './styles.scss';
 
 const ProductsRouter = (props) => {
@@ -17,7 +18,7 @@ const ProductsRouter = (props) => {
         <section className="transition-wrapper">
           <Switch location={location}>
             <Route path={`${path}/products/list`} component={ProductsList} />
-            <Route path={`${path}/products/new`} component={null} />
+            <Route path={`${path}/products/new`} component={ProductCreate} />
             <Route path={`${path}/products`} component={ProductsList} />
           </Switch>
         </section>

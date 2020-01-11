@@ -83,7 +83,7 @@ const ProductsList = (props) => {
 
   return isLoading ? <Spinner /> : 
     <div className="product-list-container">
-      <H2><Text>Listado de productos</Text></H2>
+      <H2><Text>Listado de Productos</Text></H2>
       <Button
         className="new-product-button"
         text="Nuevo producto"

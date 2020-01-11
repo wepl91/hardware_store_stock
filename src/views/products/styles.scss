@@ -21,6 +21,36 @@
   }
 }
 
+.product-create-container {
+  position: relative;
+  .bp3-heading {
+    margin-bottom: 40px;
+  }
+
+  .left-container {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    float: left;
+  }
+  .right-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+
+  .field {
+    margin-bottom: 50px;
+    width: 400px;
+    
+    .label {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+  }
+
+}
+
 .product-details-container {
   .product-details-row {
     .item {
