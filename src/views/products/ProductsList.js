@@ -49,12 +49,15 @@ const ProductsList = (props) => {
     },
     { 
       label: '',
-      content: (data) => <Button className="bp3-minimal" icon="plus" onClick={() => onClickDetails(setShowDialog, setSelectedRow, data)} intent="primary" />,
+      content: (data) => 
+          <Button 
+            className="bp3-minimal" 
+            icon="more" 
+            onClick={() => onClickDetails(setShowDialog, setSelectedRow, data)} 
+            intent="primary" />,
       align: 'right',
     },
   ];
-  
-  const rows = products;
 
   return (
     <div className="product-list-container">
@@ -62,9 +65,10 @@ const ProductsList = (props) => {
       <Button
         className="new-product-button"
         text="Nuevo producto"
-        intent="primary"
+        intent="primary"plus
+        icon="plus"
         onClick={() => onClickNewProd(props)} />
-      <Table columns={columns(setShowDialog, setSelectedRow)} data={rows} />
+      <Table columns={columns(setShowDialog, setSelectedRow)} data={products} />
       <Modal
         key={showDialog}
         isOpen={showDialog}
