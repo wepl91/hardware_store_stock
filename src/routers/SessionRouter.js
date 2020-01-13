@@ -24,7 +24,7 @@ const SessionRouter = (props) => {
       </Switch>
     </div> :
     <Switch>
-      <Redirect to={`/app`} component={() => <AppRouter loggedInUser={props.loggedInUser} />} />
+      <Redirect to={`/app/home`} component={() => <AppRouter loggedInUser={props.loggedInUser} />} />
     </Switch>
 }
 

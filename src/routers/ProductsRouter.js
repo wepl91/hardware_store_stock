@@ -14,10 +14,7 @@ const ProductsRouter = (props) => {
       <Route path={`${path}/products/list`} component={ProductsList} />
       <Route path={`${path}/products/new`} component={ProductCreate} />
       <Route path={`${path}/products`} component={ProductsList} />
-    </Switch>)
-
-
-
+    </Switch>);
 }
 
 export default withRouter(ProductsRouter);
