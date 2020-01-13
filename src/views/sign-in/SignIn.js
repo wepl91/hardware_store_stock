@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
 import { Card, InputGroup, Text, H2, Button, Spinner } from "@blueprintjs/core";
+import firebase from 'firebase';
 import './styles.scss'
+import fire from '../../fire';
 
 const signIn = (setIsLoading, props, user, password) => {
-  const loggedInUser = {user: { name: 'Walter', lastName: 'Pereyra' }}
   setIsLoading(true)
-  setTimeout(() => {
-    setIsLoading(false);
-    props.onSignIn && props.onSignIn(loggedInUser);
-  }, 500);
+  firebase.auth()
+  .signInWithEmailAndPassword(user, password)
+    .then(response => {
+      setIsLoading(false);
+      props.onSignIn && props.onSignIn(response.user);
+    })
+    .catch(function(error) {
+      // Handle Errors here.
+      alert(error.code);
+      alert(error.message);
+      setIsLoading(false);
+      // ...
+    });
 }
 const SignIn = (props) => {
   const [user, setUser] = useState('');
