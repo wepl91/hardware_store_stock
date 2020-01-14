@@ -9,9 +9,8 @@
 
 .table-row {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   min-height: 52px;
-  max-height: 52px;
   &.dark {
     background-color: #EAECEE;
   }
@@ -25,6 +24,7 @@
   }
 
   .table-column-cell {
+    box-shadow: none !important;
     display: flex;
     flex-direction: column;
     min-height: 52px;
