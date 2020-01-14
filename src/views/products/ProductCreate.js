@@ -12,7 +12,7 @@ class ProductCreate extends Component {
       reference: '',
       price: '',
       description: '',
-      provider: [],
+      providers: [],
       isLoading: false,
     }
 

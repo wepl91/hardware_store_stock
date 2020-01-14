@@ -46,7 +46,7 @@ const App = () => {
                       {context => ( <SessionRouter loggedInUser={context} onSignIn={(user) => storeUser(user, setLoggedInUser)} /> )}
                     </UserContext.Consumer>} />
                 <Redirect 
-                  to={'/app'} 
+                  to={'/app/home'} 
                   component={() => 
                       <UserContext.Consumer>
                       {context => ( <AppRouter loggedInUser={context} onSignOut={() => storeUser(null, setLoggedInUser)} /> )}

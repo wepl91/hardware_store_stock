@@ -3,7 +3,6 @@ import { withRouter } from 'react-router';
 import { Button } from "@blueprintjs/core";
 import './styles.scss';
 
-
 const onClick = (props, route) => {
   props.history.push(`/app/${route}`);
   props.onChange && props.onChange();

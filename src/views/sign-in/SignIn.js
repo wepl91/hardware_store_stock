@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Card, InputGroup, Text, H2, Button, Spinner } from "@blueprintjs/core";
 import firebase from 'firebase';
-import './styles.scss'
-import fire from '../../fire';
+import './styles.scss';
 
 const signIn = (setIsLoading, props, user, password) => {
   setIsLoading(true)
