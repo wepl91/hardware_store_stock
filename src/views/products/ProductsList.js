@@ -56,8 +56,8 @@ class ProductsList extends Component {
     });
   }
 
-  onClickNewProd = (props) => {
-    props.history.push(`${props.history.location.pathname}/new`)
+  onClickNewProd = () => {
+    this.props.history.push(`${this.props.history.location.pathname}/new`)
   }
 
   onClickDetails = (data) => {
