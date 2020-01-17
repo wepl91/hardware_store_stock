@@ -37,9 +37,9 @@ class ProviderAdd extends Component {
   renderProviders(item, props) {
     return <MenuItem
       key={item.id}
-      label={item.name}
+      text={item.name}
       onClick={props.handleClick}
-      text={`Tel: ${item.phone_number}`}
+      label={`Tel: ${item.phone_number}`}
       shouldDismissPopover
     />
   }
