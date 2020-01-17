@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { Text, H2, Button, Spinner, Tooltip, Position } from "@blueprintjs/core";
+import { 
+  Text, 
+  H2, 
+  Button, 
+  Spinner, 
+  Tooltip, 
+  Position,
+  Popover,
+  Menu,
+  MenuItem 
+} from "@blueprintjs/core";
 import Modal from '../../components/modal';
 import Table from '../../components/table';
 import fire from '../../fire';
@@ -98,20 +108,20 @@ class ProductsList extends Component {
       label: '',
       content: (data) => 
         <div className="product-list-action-buttons">
-          <Tooltip content="Detalles" position={Position.BOTTOM_LEFT}>
+          <Popover 
+            position={Position.BOTTOM}
+            content={
+              <Menu>
+                <MenuItem icon="plus" text="Detalles" onClick={() => this.onClickDetails(data)}/>
+                <MenuItem icon="edit" text="Editar"/>
+                <MenuItem icon="delete" text="Eliminar" onClick={() => this.onClickDelete(data)}/>
+              </Menu>
+            }>
             <Button 
-                className="bp3-minimal details" 
-                icon="more" 
-                onClick={() => this.onClickDetails(data)} 
-                intent="primary" />
-          </Tooltip>
-          <Tooltip content="Eliminar" position={Position.BOTTOM_LEFT}>
-            <Button 
-              className="bp3-minimal delete" 
-              icon="delete" 
-              onClick={() => this.onClickDelete(data)} 
+              className="bp3-minimal details" 
+              icon="more" 
               intent="primary" />
-          </Tooltip>
+          </Popover>
         </div>,
       align: 'right',
     },
