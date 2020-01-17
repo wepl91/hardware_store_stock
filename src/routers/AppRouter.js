@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { Button, Navbar, Position, Tooltip, H2 } from "@blueprintjs/core";
+import { Button, Navbar, Position, Tooltip } from "@blueprintjs/core";
 import Sidebar from "react-sidebar";
 import MenuContent from '../components/menu-content';
 import ProductRouter from './ProductsRouter';
-import './styles.scss';
 import HomeRouter from './HomeRouter';
+import './styles.scss';
 
 const AppRouter = (props) => {
   const [menuOpen, setMenuOpen] = useState(false);

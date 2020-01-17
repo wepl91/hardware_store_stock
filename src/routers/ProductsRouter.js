@@ -1,7 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { TransitionGroup, CSSTransition } from "react-transition-group";
 import ProductsList from '../views/products/ProductsList';
 import ProductCreate from '../views/products/ProductCreate'
 import './styles.scss';

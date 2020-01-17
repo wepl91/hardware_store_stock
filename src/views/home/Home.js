@@ -12,8 +12,10 @@ class Home extends Component {
   render() {
     return (
       <div className="product-create-container">
-      <H2><Text>{`Hola ${this.props.loggedInUser.displayName}!`}</Text></H2>
-      </div>)
+        <H2>
+          <Text>{`Bienvenido ${this.props.loggedInUser.displayName || ''}!`}</Text>
+        </H2>
+      </div>);
   }
 
 }
