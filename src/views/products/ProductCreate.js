@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { Text, H2, InputGroup, Button, Spinner } from "@blueprintjs/core";
+import ProviderAdd from './components/ProviderAdd';
 import './styles.scss';
 
 class ProductCreate extends Component {
@@ -12,11 +13,19 @@ class ProductCreate extends Component {
       reference: '',
       price: '',
       description: '',
-      providers: [],
+      providers: [''],
       isLoading: false,
     }
 
     this.handleSave = this.handleSave.bind(this);
+    this.handleAddProvider = this.handleAddProvider.bind(this);
+  }
+
+  handleAddProvider(newProviders) {
+    debugger
+    this.setState({
+      providers: newProviders,
+    });
   }
 
   handleSave() {
@@ -57,6 +66,13 @@ class ProductCreate extends Component {
                 value={this.state.price}
                 leftIcon="dollar"
                 onChange={(e) => this.setState({ price: e.target.value })}/>
+            </div>
+            <div className="field">
+              <Text className="label"><strong>Proveedores:</strong></Text>
+              <ProviderAdd 
+                key={this.state.providers} 
+                currentProviders={this.state.providers}
+                onAddProvider={this.handleAddProvider} />
             </div>
           </div>
           <div className="right-container">
