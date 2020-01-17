@@ -1,19 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { Text, H2, Button, Spinner } from "@blueprintjs/core";
+import { Text, H2, Button, Spinner, Tooltip, Position } from "@blueprintjs/core";
 import Modal from '../../components/modal';
 import Table from '../../components/table';
 import fire from '../../fire';
 import ProductDetails from './ProductDetails';
 import './styles.scss';
 
-const ProductsList = (props) => {
-  const [showDialog, setShowDialog] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [products, setProducts] = useState(null);
+class ProductsList extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showDialog: false,
+      selectedRow: null,
+      isLoading: true,
+      products: null,
+    }
+  }
+
+  componentDidMount() {
+    if (!this.state.products) {
+      this.getProduct();
+    }
+  }
+
   
-  const getProduct = (setProducts, setIsLoading) => {
+  getProduct = () => {
     fire.collection('products').get().then(snapshot => {
       if (snapshot.empty) {
         console.log('No matching documents.');
@@ -25,33 +38,45 @@ const ProductsList = (props) => {
         let prod = Object.assign({}, doc.data(), {id: doc.id})
         prods.push(prod);
       });
-      setProducts(prods)
-      setIsLoading(false)
+
+      this.setState({
+        products: prods,
+        isLoading: false,
+      });
     });
   }
-  
-  useEffect(() => {
-    if (!products) {
-      getProduct(setProducts, setIsLoading);
-    }
-  })
 
-  const onClickNewProd = (props) => {
+  onClickNewProd = (props) => {
     props.history.push(`${props.history.location.pathname}/new`)
   }
 
-  const onClickDetails = (setShowDialog, setSelectedRow, data) => {
-    setShowDialog(true);
-    setSelectedRow(data);
+  onClickDetails = (data) => {
+    this.setState({
+      showDialog: true,
+      selectedRow: data,
+    })
   }
 
+  onClickDelete = (data) => {
+    this.setState({
+      isLoading: true,
+    }, () => {
+      fire.collection('products').doc(data.id).delete()
+      .then(res => {
+        this.getProduct()
+      });
+    })
     
-  const closeDialog = (setShowDialog, setSelectedRow) => {
-    setShowDialog(false);
-    setSelectedRow(null);
+  }
+
+  closeDialog = () => {
+    this.setState({
+      showDialog: false,
+      selectedRow: null,
+    })
   }
   
-  const columns = (setShowDialog, setSelectedRow) =>  [
+  columns = () =>  [
     { 
       label: 'Referencia',
       content: (data) => `${data.reference}`,
@@ -72,33 +97,47 @@ const ProductsList = (props) => {
     { 
       label: '',
       content: (data) => 
-          <Button 
-            className="bp3-minimal" 
-            icon="more" 
-            onClick={() => onClickDetails(setShowDialog, setSelectedRow, data)} 
-            intent="primary" />,
+        <div className="product-list-action-buttons">
+          <Tooltip content="Detalles" position={Position.BOTTOM_LEFT}>
+            <Button 
+                className="bp3-minimal details" 
+                icon="more" 
+                onClick={() => this.onClickDetails(data)} 
+                intent="primary" />
+          </Tooltip>
+          <Tooltip content="Eliminar" position={Position.BOTTOM_LEFT}>
+            <Button 
+              className="bp3-minimal delete" 
+              icon="delete" 
+              onClick={() => this.onClickDelete(data)} 
+              intent="primary" />
+          </Tooltip>
+        </div>,
       align: 'right',
     },
   ];
 
-  return isLoading ? <Spinner /> : 
-    <div className="product-list-container">
-      <H2><Text>Listado de Productos</Text></H2>
-      <Button
-        className="new-product-button"
-        text="Nuevo producto"
-        intent="primary"plus
-        icon="plus"
-        onClick={() => onClickNewProd(props)} />
-      <Table columns={columns(setShowDialog, setSelectedRow)} data={products} />
-      <Modal
-        key={showDialog}
-        isOpen={showDialog}
-        onClose={() => closeDialog(setShowDialog, setSelectedRow)}
-        title="Detalle de producto"
-        content={<ProductDetails product={selectedRow}/>}
-      />
-    </div>
+  render() {
+    const { products, isLoading, showDialog, selectedRow } = this.state;
+    return isLoading ? <Spinner /> : 
+      <div className="product-list-container">
+        <H2><Text>Listado de Productos</Text></H2>
+        <Button
+          className="new-product-button"
+          text="Nuevo producto"
+          intent="primary"plus
+          icon="plus"
+          onClick={() => this.onClickNewProd()} />
+        <Table columns={this.columns()} data={products} />
+        <Modal
+          key={showDialog}
+          isOpen={showDialog}
+          onClose={() => this.closeDialog()}
+          title="Detalle de producto"
+          content={<ProductDetails product={selectedRow}/>}
+        />
+      </div>
+  }
 }
 
 export default withRouter(ProductsList);
