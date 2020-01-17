@@ -6,7 +6,6 @@ const Modal = ({title, onClose, isOpen, content, footer}) => {
   return (
     <Dialog isOpen={isOpen}>
       <div class="bp3-dialog-header">
-        <span class="bp3-icon-large bp3-icon-inbox"></span>
         <h4 class="bp3-heading">{ title }</h4>
         <button 
           aria-label="Close" 

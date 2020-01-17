@@ -3,7 +3,18 @@
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 .provider-add-container {
+  display: flex;
+  flex-direction: column;
+  .bp3-popover-wrapper {
+    .bp3-popover-target {
+      width: 70%;
+      .bp3-button {
+        width: 100%;
+      }
+    }
+  }
   .bp3-minimal {
     margin-top: 10px;
+    width: 45%;
   }
 }
