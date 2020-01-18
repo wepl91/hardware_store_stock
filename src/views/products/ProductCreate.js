@@ -47,6 +47,8 @@ class ProductCreate extends Component {
         let prov = Object.assign({}, doc.data(), { id: doc.id })
         providers.push(prov);
       });
+      providers.unshift({id: 'add'});
+
       this.setState({
         isLoading: false,
         allProviders: providers,
@@ -54,10 +56,20 @@ class ProductCreate extends Component {
     });
   }
 
-  handleAddProvider(newProviders) {
-    this.setState({
-      providers: newProviders,
-    });
+  handleAddProvider(newProviders, afterCreate = false) {
+    if (afterCreate) {
+      const prevProviders = Array.from(this.state.allProviders);
+      prevProviders.push(newProviders[newProviders.length -1]);
+      
+      this.setState({
+        allProviders: prevProviders,
+        providers: newProviders,
+      });
+    } else {
+      this.setState({
+        providers: newProviders,
+      });
+    }
   }
 
   handleSave() {

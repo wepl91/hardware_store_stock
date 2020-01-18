@@ -2,9 +2,9 @@ import React from 'react';
 import { Dialog } from "@blueprintjs/core";
 import './styles.scss';
 
-const Modal = ({title, onClose, isOpen, content, footer}) => {
+const Modal = ({title, onClose, isOpen, content, footer, className}) => {
   return (
-    <Dialog isOpen={isOpen}>
+    <Dialog isOpen={isOpen} className={className}>
       <div class="bp3-dialog-header">
         <h4 class="bp3-heading">{ title }</h4>
         <button 

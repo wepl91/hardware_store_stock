@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Select } from "@blueprintjs/select";
 import { MenuItem, Button, Alignment } from "@blueprintjs/core";
+import ProviderCreateModal from './ProviderCreateModal';
 import './styles.scss';
 
 class ProviderAdd extends Component {
@@ -10,10 +11,25 @@ class ProviderAdd extends Component {
     this.state = {
       currentProviders: props.currentProviders || [],
       addProvider: false,
+      createProvider: false,
     }
 
     this.handleSelect = this.handleSelect.bind(this);
     this.handleNewProvider = this.handleNewProvider.bind(this);
+    this.handleCreateProvider = this.handleCreateProvider.bind(this);
+
+    this.renderProviders = this.renderProviders.bind(this);
+  }
+
+  handleCreateProvider(newProvider) {
+    const prevProviders = Array.from(this.state.currentProviders);
+    prevProviders.push(newProvider)
+      
+    this.setState({
+      showModal: false,
+    }, () => {
+      this.props.onAddProvider && this.props.onAddProvider(prevProviders, true)
+    })
   }
 
   handleNewProvider(newProvider) {
@@ -35,24 +51,30 @@ class ProviderAdd extends Component {
   }
 
   renderProviders(item, props) {
-    return <MenuItem
-      key={item.id}
-      text={item.name}
-      onClick={props.handleClick}
-      label={`Tel: ${item.phone_number}`}
-      shouldDismissPopover
-    />
+    return item.id === 'add' ?
+      <MenuItem
+        key={item.id}
+        icon="plus"
+        text="Crear proveedor"
+        onClick={() => this.setState(prevState => ({createProvider: !prevState.createProvider}))}
+        shouldDismissPopover
+      /> :
+      <MenuItem
+        key={item.id}
+        text={item.name}
+        onClick={props.handleClick}
+        label={`Tel: ${item.phone_number}`}
+        shouldDismissPopover
+      /> 
   }
 
   filterProviders(query, prov) {
     return `${prov.name}`.indexOf(query.toLowerCase()) >= 0
   };
 
-  renderSelectedProviders() {
+  renderSelectedProviders(allProviders) {
     const ret = [];
     const { currentProviders } = this.state;
-    const { allProviders } = this.props;
-
     currentProviders.forEach((provider, index) => {
       provider.id && ret.push(
         <Select
@@ -70,11 +92,11 @@ class ProviderAdd extends Component {
   }
 
   render() {
-    const { currentProviders } = this.state;
+    const { currentProviders, createProvider } = this.state;
     const { allProviders } = this.props;
     return (
       <div className="provider-add-container">
-        {currentProviders.length > 0 && this.renderSelectedProviders()}
+        {currentProviders.length > 0 && this.renderSelectedProviders(allProviders)}
         {this.state.addProvider &&
           <Select
             itemPredicate={this.filterProviders}
@@ -92,6 +114,12 @@ class ProviderAdd extends Component {
           disabled={this.state.addProvider}
           onClick={() => this.setState(prevState => ({ addProvider: !prevState.addProvider }))}
           intent="primary" />
+        { createProvider && 
+          <ProviderCreateModal
+            showModal={createProvider}
+            onCreate={this.handleCreateProvider}
+            onClose={() => this.setState(prevState => ({createProvider: !prevState.createProvider}))}
+          /> }
       </div>)
   }
 
