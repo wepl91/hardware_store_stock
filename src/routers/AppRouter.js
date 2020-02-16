@@ -7,6 +7,7 @@ import MenuContent from '../components/menu-content';
 import SidebarFixed from '../components/sidebar-fixed';
 import HeaderNavbar from '../components/header-navbar';
 import ProductRouter from './ProductsRouter';
+import ProvidersRouter from './ProvidersRouter';
 import HomeRouter from './HomeRouter';
 import './styles.scss';
 
@@ -27,6 +28,7 @@ const AppRouter = (props) => {
       <div className="layout-container">
         <HomeRouter loggedInUser={props.loggedInUser}/>
         <ProductRouter />
+        <ProvidersRouter />
       </div>
     </Sidebar> :
     <Switch>

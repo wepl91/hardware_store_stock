@@ -1,0 +1,22 @@
+@import "~normalize.css";
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+
+.providers-list-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .new-provider-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .react-grid-Container {
+    margin-top: 40px;
+    .react-grid-Main {
+
+    }
+  }
+}

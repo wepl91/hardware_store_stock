@@ -12,8 +12,15 @@ const MenuContent = (props) => {
     <div className="menu-options-container">
       <Button 
         className="bp3-minimal" 
-        icon="cog" text="Productos"
+        icon="cog" 
+        text="Productos"
         onClick={() => onClick(props, 'products')}
+        intent="primary" />
+      <Button 
+        className="bp3-minimal" 
+        icon="people" 
+        text="Proveedores"
+        onClick={() => onClick(props, 'providers')}
         intent="primary" />
       <Button 
         className="bp3-minimal" 

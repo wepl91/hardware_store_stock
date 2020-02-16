@@ -75,8 +75,7 @@ class ProductsList extends Component {
       .then(res => {
         this.getProduct()
       });
-    })
-    
+    });
   }
 
   closeDialog = () => {
