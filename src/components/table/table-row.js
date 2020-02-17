@@ -10,7 +10,7 @@ const TableRow = ({columns, data, index}) => {
   return (
     <tr className={`table-row ${index % 2 !== 0 && 'dark'}`}>
       { columns.map(column => 
-        <td className={`table-column-cell ${column.align || ''}`} style={{width: `${100/columns.length}%`}}>
+        <td key={`row-${column.label}`} className={`table-column-cell ${column.align || ''}`} style={{width: `${100/columns.length}%`}}>
           {renderContent(column.content)}
         </td>) }
     </tr>);

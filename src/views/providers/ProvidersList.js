@@ -99,7 +99,7 @@ class ProvidersList extends Component {
   ];
 
   render() {
-    const { providers, isLoading, showDialog, selectedRow } = this.state;
+    const { providers, isLoading } = this.state;
     return isLoading ? <Spinner /> : 
       <div className="providers-list-container">
         <H2><Text>Listado de Proveedores</Text></H2>

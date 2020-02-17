@@ -5,7 +5,6 @@ import {
   H2, 
   Button, 
   Spinner, 
-  Tooltip, 
   Position,
   Popover,
   Menu,
@@ -148,7 +147,7 @@ class ProductsList extends Component {
         <Button
           className="new-product-button"
           text="Nuevo producto"
-          intent="primary"plus
+          intent="primary"
           icon="plus"
           onClick={() => this.onClickNewProd()} />
         <Table 

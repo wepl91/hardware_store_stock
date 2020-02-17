@@ -6,26 +6,31 @@ import Paginate from '../paginate'
 const Table = ({ columns, data, withPagination, totalPages, currentPage, quantityShown, onPaginate }) => {
   const tableHeaders = (columns) => {
     return columns.map(column => 
-      <th style={{width: `${100/columns.length}%`}} className={`table-column-cell ${column.align}`} >{column.label}</th>)
+      <th 
+        key={`header-${column.label}`} 
+        style={{width: `${100/columns.length}%`}} 
+        className={`table-column-cell ${column.align}`} >{column.label}</th>)
   }
 
   return(
-    <table class="bp3-html-table">
-      <thead>
-        <tr className="table-row header">
-          {tableHeaders(columns)}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((element, index) => ( <TableRow index={index} key={element.id} columns={columns} data={element} />))}
-      </tbody>
+    <React.Fragment>
+      <table className="bp3-html-table">
+        <thead>
+          <tr className="table-row header">
+            {tableHeaders(columns)}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((element, index) => ( <TableRow index={index} key={element.id} columns={columns} data={element} />))}
+        </tbody>
+      </table>
       { withPagination && 
         <Paginate 
           currentPage={currentPage} 
           totalPages={totalPages} 
           quantityShown={quantityShown || 2}
           onChange={(page) => onPaginate(page)}/> }
-    </table>);
+    </React.Fragment>);
 }
 
 export default Table;

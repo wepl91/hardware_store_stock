@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { Button, Navbar, Position, Tooltip } from "@blueprintjs/core";
 import Sidebar from "react-sidebar";
 import MenuContent from '../components/menu-content';
 import SidebarFixed from '../components/sidebar-fixed';

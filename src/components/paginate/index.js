@@ -21,7 +21,8 @@ const Paginate = ({ currentPage, totalPages, quantityShown, onChange }) => {
       let number = currentPage - i;
       if (number > 0) {
         buttons.unshift(
-          <Button 
+          <Button
+            key={`index-${number}`}
             className="page-button" 
             text={number} 
             onClick={() => onChange(number)}/>)
@@ -38,6 +39,7 @@ const Paginate = ({ currentPage, totalPages, quantityShown, onChange }) => {
       if (number <= totalPages) {
         buttons.push(
           <Button 
+            key={`index-${number}`}
             className="page-button" 
             text={number} 
             onClick={() => onChange(number)} />)
