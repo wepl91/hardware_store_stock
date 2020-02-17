@@ -19,12 +19,16 @@ const AppRouter = (props) => {
       open={menuOpen}
       onSetOpen={() => setMenuOpen(!menuOpen)}
       styles={{ sidebar: { background: "white" } }}>
-      <HeaderNavbar onSignOut={props.onSignOut} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <HeaderNavbar 
+        onSignOut={props.onSignOut} 
+        menuOpen={menuOpen} 
+        setMenuOpen={setMenuOpen} />
       <SidebarFixed>
         <h3>Sidebar fixed</h3>
         <label>Acá puede haber información de la sección o el modulo de ventas</label>
       </SidebarFixed>
       <div className="layout-container">
+        
         <HomeRouter loggedInUser={props.loggedInUser}/>
         <ProductRouter />
         <ProvidersRouter />

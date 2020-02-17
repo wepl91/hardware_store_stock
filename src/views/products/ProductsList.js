@@ -14,6 +14,7 @@ import Modal from '../../components/modal';
 import Table from '../../components/table';
 import fire from '../../fire';
 import ProductDetails from './ProductDetails';
+import { getProducts } from '../../querys/products-queries';
 import './styles.scss';
 
 class ProductsList extends Component {
@@ -25,36 +26,48 @@ class ProductsList extends Component {
       selectedRow: null,
       isLoading: true,
       products: null,
-      totalPages: 10, //test hardcoded
-      currentPage: 1
+      totalPages: 1,
+      currentPage: 1,
+      error: false,
     }
   }
 
   componentDidMount() {
     if (!this.state.products) {
-      this.getProduct();
+      this.getPaginationData();
     }
   }
 
-  
-  getProduct = () => {
-    fire.collection('products').get().then(snapshot => {
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-        return;
-      }
-
-      let prods = [];
+  getPaginationData() {
+    fire.collection('counters').get().then(snapshot => {
       snapshot.forEach(doc => {
-        let prod = Object.assign({}, doc.data(), {id: doc.id})
-        prods.push(prod);
-      });
-
-      this.setState({
-        products: prods,
-        isLoading: false,
+        if (doc.data().counter.collection_name === 'products') {
+          this.setState({
+            totalPages: Math.ceil(doc.data().counter.collection_count / 20),
+          });
+        } 
       });
     });
+    this.getProduct(1);
+  }
+
+  
+  getProduct = (page = null) => {
+    let index = page ? page - 1 : 0;
+    getProducts(page)
+      .then((response, error) => {
+        this.setState({
+          products: response,
+          isLoading: false,
+        });
+    })
+    .catch(err => {
+      this.setState({
+        error: true,
+        isLoading: false,
+        products: [],
+      })
+    })
   }
 
   onClickNewProd = () => {

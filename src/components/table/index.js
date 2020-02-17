@@ -9,7 +9,8 @@ const Table = ({ columns, data, withPagination, totalPages, currentPage, quantit
       <th 
         key={`header-${column.label}`} 
         style={{width: `${100/columns.length}%`}} 
-        className={`table-column-cell ${column.align}`} >{column.label}</th>)
+        className={`table-column-cell ${column.align}`} 
+      >{column.label}</th>)
   }
 
   return(
@@ -17,7 +18,7 @@ const Table = ({ columns, data, withPagination, totalPages, currentPage, quantit
       <table className="bp3-html-table">
         <thead>
           <tr className="table-row header">
-            {tableHeaders(columns)}
+            { tableHeaders(columns) }
           </tr>
         </thead>
         <tbody>

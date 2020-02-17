@@ -58,7 +58,8 @@ const Paginate = ({ currentPage, totalPages, quantityShown, onChange }) => {
       <div className="page-container">
         { (currentPage - quantityShown) > 1 && <Icon className="more" icon="more" intent="primary"/> }
         { renderPrevButtons() }
-        <Button className="page-button" text={currentPage} intent="primary" />
+        <Button 
+          className="page-button" text={currentPage} intent="primary" />
         { renderNextButtons() }
         { currentPage + quantityShown < totalPages && <Icon className="more" icon="more" intent="primary"/> }
       </div>
