@@ -1,0 +1,19 @@
+.paginate-container {
+  width: 100%;
+  margin-top: 25px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+
+  .page-button {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .more {
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: -2px;
+  }
+}

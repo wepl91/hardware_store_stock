@@ -26,6 +26,8 @@ class ProductsList extends Component {
       selectedRow: null,
       isLoading: true,
       products: null,
+      totalPages: 10, //test hardcoded
+      currentPage: 1
     }
   }
 
@@ -126,8 +128,20 @@ class ProductsList extends Component {
     },
   ];
 
+  onPaginate = (page) => {
+    this.setState({
+      currentPage: page,
+    })
+  }
+
   render() {
-    const { products, isLoading, showDialog, selectedRow } = this.state;
+    const { 
+      products, 
+      isLoading, 
+      showDialog, 
+      selectedRow,
+      totalPages,
+      currentPage } = this.state;
     return isLoading ? <Spinner /> : 
       <div className="product-list-container">
         <H2><Text>Listado de Productos</Text></H2>
@@ -137,7 +151,13 @@ class ProductsList extends Component {
           intent="primary"plus
           icon="plus"
           onClick={() => this.onClickNewProd()} />
-        <Table columns={this.columns()} data={products} />
+        <Table 
+          withPagination
+          columns={this.columns()} 
+          data={products} 
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPaginate={(page) => this.onPaginate(page)} />
         <Modal
           key={showDialog}
           isOpen={showDialog}
