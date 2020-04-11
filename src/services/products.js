@@ -1,4 +1,5 @@
 import fire from '../fire';
+const moment = require('moment');
 
 // Internal method to update counter when product is created
 const incrementCounter = () => {
@@ -113,7 +114,8 @@ export const getProducts = (page = null, orderBy = 'name') => {
 }
 
 export const createProduct = (productObject) => {
-  productObject['created_at'] = new Date();
+  const created = moment();
+  productObject['created_at'] = created.toISOString();
   return new Promise((resolve, reject) => {
     fire.collection('products')
       .add(productObject)

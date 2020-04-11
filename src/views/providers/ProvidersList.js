@@ -19,6 +19,7 @@ import {
 import ProviderCreateModal from '../products/components/ProviderCreateModal';
 
 import './styles.scss';
+const moment = require('moment');
 
 class ProvidersList extends Component {
   constructor(props) {
@@ -96,6 +97,11 @@ class ProvidersList extends Component {
     { 
       label: 'Teléfono',
       content: (data) => data.phone_number || '-',
+    },
+    { 
+      label: 'Fecha creación',
+      content: (data) => data.created_at ? moment(data.created_at).format('DD-MM-YYYY') : '-',
+      align: 'center'
     },
     { 
       label: '',

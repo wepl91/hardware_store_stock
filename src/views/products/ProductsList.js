@@ -20,6 +20,7 @@ import {
 } from '../../services/products';
 
 import './styles.scss';
+const moment = require('moment');
 
 class ProductsList extends Component {
   constructor(props) {
@@ -129,6 +130,11 @@ class ProductsList extends Component {
     { 
       label: 'Precio',
       content: (data) => data.price ? `$${data.price}` : '-',
+      align: 'center'
+    },
+    { 
+      label: 'Fecha creación',
+      content: (data) => data.created_at ? moment(data.created_at).format('DD-MM-YYYY') : '-',
       align: 'center'
     },
     { 
