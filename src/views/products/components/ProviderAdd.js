@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Select } from "@blueprintjs/select";
-import { MenuItem, Button, Alignment } from "@blueprintjs/core";
+import { MenuItem, Button, Alignment, Tag } from "@blueprintjs/core";
 import ProviderCreateModal from './ProviderCreateModal';
 import './styles.scss';
 
@@ -22,32 +22,45 @@ class ProviderAdd extends Component {
   }
 
   handleCreateProvider(newProvider) {
+    const { onAddProvider } = this.props; 
     const prevProviders = Array.from(this.state.currentProviders);
     prevProviders.push(newProvider)
       
     this.setState({
       showModal: false,
     }, () => {
-      this.props.onAddProvider && this.props.onAddProvider(prevProviders, true)
+      onAddProvider && onAddProvider(prevProviders, true)
     })
   }
 
   handleNewProvider(newProvider) {
+    const { onAddProvider } = this.props;
     const prevProviders = Array.from(this.state.currentProviders);
     prevProviders.push(newProvider);
 
     this.setState({
       addProvider: false,
     }, () => {
-      this.props.onAddProvider && this.props.onAddProvider(prevProviders)
+      onAddProvider && onAddProvider(prevProviders)
     });
   }
 
+  removeProvider(provider) {
+    const { onAddProvider } = this.props;
+    let prevProviders = Array.from(this.state.currentProviders);
+    prevProviders = prevProviders.filter(prov => prov.id != provider.id);
+    
+    this.setState({
+      addProvider: false,
+    }, () => onAddProvider && onAddProvider(prevProviders));
+  }
+
   handleSelect(provider, index) {
+    const { onAddProvider } = this.props;
     const prevProviders = Array.from(this.state.currentProviders);
     prevProviders[index] = provider;
 
-    this.props.onAddProvider && this.props.onAddProvider(prevProviders);
+    onAddProvider && onAddProvider(prevProviders);
   }
 
   renderProviders(item, props) {
@@ -69,7 +82,8 @@ class ProviderAdd extends Component {
   }
 
   filterProviders(query, prov) {
-    return `${prov.name}`.indexOf(query.toLowerCase()) >= 0
+    if (!prov || !prov.name) return true;
+    return prov.name.toLowerCase().includes(query.toLowerCase())
   };
 
   renderSelectedProviders(allProviders) {
@@ -77,16 +91,12 @@ class ProviderAdd extends Component {
     const { currentProviders } = this.state;
     currentProviders.forEach((provider, index) => {
       provider.id && ret.push(
-        <Select
-          key={provider.id}
-          itemPredicate={this.filterProviders}
-          items={allProviders}
-          itemRenderer={this.renderProviders}
-          onItemSelect={(provider) => this.handleSelect(provider, index)}
-          noResults={<MenuItem disabled text="Sin resultados." />}
-        >
-          <Button alignText={Alignment.LEFT} className="bp3-minimal" rightIcon="caret-down" active text={provider.name} />
-        </Select>)
+        <Tag 
+          round
+          large
+          minimal 
+          onRemove={() => this.removeProvider(provider)}>{provider.name}</Tag>
+      )
     });
     return ret;
   }

@@ -12,9 +12,13 @@ import {
 } from "@blueprintjs/core";
 import Modal from '../../components/modal';
 import Table from '../../components/table';
-import fire from '../../fire';
 import ProductDetails from './ProductDetails';
-import { getProducts } from '../../querys/products-queries';
+import { 
+  getProducts,
+  getProductsCount,
+  deleteProduct
+} from '../../services/products';
+
 import './styles.scss';
 
 class ProductsList extends Component {
@@ -38,56 +42,66 @@ class ProductsList extends Component {
     }
   }
 
-  getPaginationData() {
-    fire.collection('counters').get().then(snapshot => {
-      snapshot.forEach(doc => {
-        if (doc.data().counter.collection_name === 'products') {
-          this.setState({
-            totalPages: Math.ceil(doc.data().counter.collection_count / 20),
-          });
-        } 
-      });
-    });
-    this.getProduct(1);
-  }
-
-  
-  getProduct = (page = null) => {
-    let index = page ? page - 1 : 0;
-    getProducts(page)
-      .then((response, error) => {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.currentPage != this.state.currentPage) {
+      getProducts(this.state.currentPage).then(response => {
         this.setState({
           products: response,
-          isLoading: false,
         });
-    })
-    .catch(err => {
-      this.setState({
-        error: true,
-        isLoading: false,
-        products: [],
-      })
+      });
+    }
+  }
+
+  getPaginationData() {
+    getProductsCount().then(response => {
+      if (response > 20) {
+        const pages = Math.ceil(response/20);
+        this.setState({
+          totalPages: pages,
+        }, () => {
+          getProducts(1).then(response => {
+            this.setState({
+              products: response,
+              isLoading: false,
+            });
+          });
+        });
+      }
+      else {
+        getProducts(1).then(response => {
+          this.setState({
+            products: response,
+            isLoading: false,
+          });
+        });
+      }
     })
   }
 
   onClickNewProd = () => {
-    this.props.history.push(`${this.props.history.location.pathname}/new`)
+    this.props.history.push(`${this.props.history.location.pathname}/new`);
   }
 
   onClickDetails = (data) => {
     this.setState({
       showDialog: true,
       selectedRow: data,
-    })
+    });
   }
 
   onClickDelete = (data) => {
     this.setState({
       isLoading: true,
     }, () => {
-      fire.collection('products').doc(data.id).delete()
+      deleteProduct(data.id)
       .then(res => {
-        this.getProduct()
+        getProducts(this.state.currentPage)
+          .then(response => {
+            this.setState({
+              products: response,
+              isLoading: false,
+            });
+          })
       });
     });
   }
@@ -96,7 +110,7 @@ class ProductsList extends Component {
     this.setState({
       showDialog: false,
       selectedRow: null,
-    })
+    });
   }
   
   columns = () =>  [
@@ -143,7 +157,7 @@ class ProductsList extends Component {
   onPaginate = (page) => {
     this.setState({
       currentPage: page,
-    })
+    });
   }
 
   render() {

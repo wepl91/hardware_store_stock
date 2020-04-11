@@ -10,6 +10,7 @@ import {
 import ProviderAdd from './components/ProviderAdd';
 import fire from '../../fire';
 import { withToastManager } from 'react-toast-notifications';
+import { createProduct } from '../../services/products';
 import './styles.scss';
 
 class ProductCreate extends Component {
@@ -84,10 +85,9 @@ class ProductCreate extends Component {
         description: this.state.description,
         providers: this.state.providers,
       }
-      fire.collection('products').doc()
-        .set(newProd)
+      createProduct(newProd)
         .then(res => {
-          this.props.history.push(`${this.props.history.location.pathname}/list`)
+          window.location.href = '/app/products/list';
         })
         .catch(err => {
           toastManager.add('Ups! Parece que hubo un error al guardar! Inténtalo nuevamente más tarde', {
@@ -104,7 +104,7 @@ class ProductCreate extends Component {
   }
 
   render() {
-    const { isLoading, isSaving } = this.state;
+    const { isLoading, isSaving, providers, allProviders } = this.state;
     return isLoading ? <Spinner /> :
       <div className="product-create-container">
         <H2><Text>Nuevo Producto</Text></H2>
@@ -130,12 +130,19 @@ class ProductCreate extends Component {
           <div className="field">
             <Text className="label"><strong>Proveedores:</strong></Text>
             <ProviderAdd
+              key={JSON.stringify(providers)}
               disable={isLoading || isSaving}
-              allProviders={this.state.allProviders}
-              key={this.state.providers}
-              currentProviders={this.state.providers}
+              allProviders={allProviders}
+              currentProviders={providers}
               onAddProvider={this.handleAddProvider} />
           </div>
+          <Button
+            className="new-product-button"
+            text={isLoading || isSaving ? 'Guardando..' : 'Guardar'}
+            disabled={isLoading || isSaving}
+            intent="primary"
+            loading={isLoading || isSaving}
+            onClick={this.handleSave} />
         </div>
         <div className="right-container">
           <div className="field">
@@ -157,13 +164,6 @@ class ProductCreate extends Component {
               onChange={(e) => this.setState({ description: e.target.value })} />
           </div>
         </div>
-        <Button
-          className="new-product-button"
-          text={isLoading || isSaving ? 'Guardando..' : 'Guardar'}
-          disabled={isLoading || isSaving}
-          intent="primary"
-          loading={isLoading || isSaving}
-          onClick={this.handleSave} />
       </div>;
   }
 

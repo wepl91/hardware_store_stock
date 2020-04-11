@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-
 import { 
   Text, 
   H2, 
@@ -11,9 +10,13 @@ import {
   Menu,
   MenuItem 
 } from "@blueprintjs/core";
-
 import Table from '../../components/table';
-import fire from '../../fire';
+import { 
+  getProviders,
+  getProvidersCount,
+  deleteProvider
+} from '../../services/providers';
+import ProviderCreateModal from '../products/components/ProviderCreateModal';
 
 import './styles.scss';
 
@@ -26,43 +29,61 @@ class ProvidersList extends Component {
       selectedRow: null,
       isLoading: true,
       providers: null,
+      totalPages: 1,
+      currentPage: 1,
+      showCreate: false,
     }
   }
-
 
   componentDidMount() {
     if (!this.state.products) {
-      this.getProviders();
+      this.getPaginationData();
     }
   }
 
-  getProviders = () => {
-    fire.collection('providers').get().then(snapshot => {
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-        return;
+  getPaginationData() {
+    getProvidersCount().then(response => {
+      if (response > 20) {
+        const pages = Math.ceil(response/20);
+        this.setState({
+          totalPages: pages,
+        }, () => {
+          getProviders(1).then(response => {
+            this.setState({
+              providers: response,
+              isLoading: false,
+            });
+          });
+        });
       }
+      else {
+        getProviders(1).then(response => {
+          this.setState({
+            providers: response,
+            isLoading: false,
+          });
+        });
+      }
+    })
+  }
 
-      let provs = [];
-      snapshot.forEach(doc => {
-        let prov = Object.assign({}, doc.data(), {id: doc.id})
-        provs.push(prov);
-      });
-
-      this.setState({
-        providers: provs,
-        isLoading: false,
-      });
-    });
+  afterCreateProvider(provider) {
+    window.location.reload();
   }
 
   onClickDelete = (data) => {
     this.setState({
       isLoading: true,
     }, () => {
-      fire.collection('providers').doc(data.id).delete()
+      deleteProvider(data.id)
       .then(res => {
-        this.getProviders()
+        getProviders(this.state.currentPage)
+          .then(response => {
+            this.setState({
+              providers: response,
+              isLoading: false,
+            });
+          });
       });
     });
   }
@@ -80,7 +101,9 @@ class ProvidersList extends Component {
       label: '',
       content: (data) => 
         <div className="product-list-action-buttons">
-          <Popover 
+          <Popover
+            style={{width: '200px'}}
+            className="menu-providers"
             position={Position.BOTTOM}
             content={
               <Menu>
@@ -99,7 +122,7 @@ class ProvidersList extends Component {
   ];
 
   render() {
-    const { providers, isLoading } = this.state;
+    const { providers, isLoading, showCreate } = this.state;
     return isLoading ? <Spinner /> : 
       <div className="providers-list-container">
         <H2><Text>Listado de Proveedores</Text></H2>
@@ -108,8 +131,13 @@ class ProvidersList extends Component {
           text="Nuevo proveedor"
           intent="primary"plus
           icon="plus"
-          onClick={() => alert('Crear proveedor')} />
+          onClick={() => this.setState({ showCreate: true })} />
         <Table columns={this.columns()} data={providers} />
+        <ProviderCreateModal 
+          showModal={showCreate}
+          onClose={() => this.setState({ showCreate: false })}
+          onCreate={(newProvider) => this.afterCreateProvider(newProvider)}
+          />
       </div>
   }
 }

@@ -25,7 +25,7 @@ const Table = ({ columns, data, withPagination, totalPages, currentPage, quantit
           {data.map((element, index) => ( <TableRow index={index} key={element.id} columns={columns} data={element} />))}
         </tbody>
       </table>
-      { withPagination && 
+      { withPagination && totalPages && totalPages > 1 &&
         <Paginate 
           currentPage={currentPage} 
           totalPages={totalPages} 

@@ -5,20 +5,19 @@ import {
   InputGroup,
   Button,
 } from "@blueprintjs/core";
-import fire from '../../../fire';
+import { createProvider } from '../../../services/providers'
 
 const ProviderCreateModal = ({showModal, onClose, onCreate}) => {
   const [name, setName] = useState(null);
   const [phone, setPhone] = useState(null);
   const [isSaving, setIsSaving] = useState(false)
 
-  const createProvider = (newProvider) => {
+  const handleCreate = (newProvider) => {
     setIsSaving(true);
-    fire.collection('providers').doc()
-        .set(newProvider)
-        .then( () => {
-          onCreate(newProvider);
-        });
+    createProvider(newProvider)
+      .then((ref) => {
+        onCreate(Object.assign(newProvider, { id: ref.id }));
+      });
   }
 
   return (
@@ -55,7 +54,7 @@ const ProviderCreateModal = ({showModal, onClose, onCreate}) => {
             loading={isSaving}
             text="Crear" 
             intent="primary"
-            onClick={() => createProvider({name: name, phone_number:phone})} />
+            onClick={() => handleCreate({name: name, phone_number:phone})} />
           <Button 
             loading={isSaving}
             text="Cancelar" 
