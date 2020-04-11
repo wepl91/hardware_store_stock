@@ -76,7 +76,7 @@ export const getAllProviders = () => {
       .get()
       .then(snapshot => {
         if (snapshot.empty) {
-          reject(new Error(404));
+          resolve([])
         }
         snapshot.forEach(doc => {
           let prod = Object.assign({}, doc.data(), {id: doc.id})
@@ -102,7 +102,7 @@ export const getProviders = (page = null, orderBy = 'name') => {
       .get()
       .then(snapshot => {
       if (snapshot.empty) {
-        reject(new Error(404));
+        resolve([])
       }
       snapshot.forEach(doc => {
         let prod = Object.assign({}, doc.data(), {id: doc.id})
