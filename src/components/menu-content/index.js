@@ -14,19 +14,19 @@ const MenuContent = (props) => {
         className="bp3-minimal" 
         icon="cog" 
         text="Productos"
-        onClick={() => onClick(props, 'products')}
+        onClick={() => onClick(props, 'products/list')}
         intent="primary" />
       <Button 
         className="bp3-minimal" 
         icon="people" 
         text="Proveedores"
-        onClick={() => onClick(props, 'providers')}
+        onClick={() => onClick(props, 'providers/list')}
         intent="primary" />
       <Button 
         className="bp3-minimal" 
         icon="list-detail-view" 
         text="Ventas" 
-        onClick={() => onClick(props, 'sales')}
+        onClick={() => onClick(props, 'sales/list')}
         intent="primary" />
   </div> );
 }
