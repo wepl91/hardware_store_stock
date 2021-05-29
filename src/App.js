@@ -2,7 +2,6 @@ import React, { useState, Suspense, useEffect } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Spinner } from "@blueprintjs/core";
 import { UserContext } from './contexts/user-context';
-import { ToastProvider } from 'react-toast-notifications';
 import './App.scss';
 
 import AppRouter from './routers/AppRouter';
@@ -28,39 +27,33 @@ const App = () => {
   });
 
   return (
-    <div>
-      <UserContext.Provider value={loggedInUser}>
-        <Suspense fallback={loader}>
-          {isLoading ? loader :
-            <BrowserRouter>
-              <ToastProvider
-                autoDismissTimeout={6000}
-                placement="bottom-right">
-                <Switch>
-                  <Route
-                    path={'/app'}
-                    component={() =>
-                      <UserContext.Consumer>
-                        {context => (<AppRouter loggedInUser={context} onSignOut={() => storeUser(null, setLoggedInUser)} />)}
-                      </UserContext.Consumer>} />
-                  <Route
-                    path={'/session'}
-                    component={() =>
-                      <UserContext.Consumer>
-                        {context => (<SessionRouter loggedInUser={context} onSignIn={(user) => storeUser(user, setLoggedInUser)} />)}
-                      </UserContext.Consumer>} />
-                  <Redirect
-                    to={'/app/home'}
-                    component={() =>
-                      <UserContext.Consumer>
-                        {context => (<AppRouter loggedInUser={context} onSignOut={() => storeUser(null, setLoggedInUser)} />)}
-                      </UserContext.Consumer>} />
-                </Switch>
-              </ToastProvider>
-            </BrowserRouter>}
-        </Suspense>
-      </UserContext.Provider>
-    </div>);
+    <UserContext.Provider value={loggedInUser}>
+      <Suspense fallback={loader}>
+        {isLoading ? loader :
+          <BrowserRouter>
+            <Switch>
+              <Route
+                path={'/app'}
+                component={() =>
+                  <UserContext.Consumer>
+                    {context => (<AppRouter loggedInUser={context} onSignOut={() => storeUser(null, setLoggedInUser)} />)}
+                  </UserContext.Consumer>} />
+              <Route
+                path={'/session'}
+                component={() =>
+                  <UserContext.Consumer>
+                    {context => (<SessionRouter loggedInUser={context} onSignIn={(user) => storeUser(user, setLoggedInUser)} />)}
+                  </UserContext.Consumer>} />
+              <Redirect
+                to={'/app/home'}
+                component={() =>
+                  <UserContext.Consumer>
+                    {context => (<AppRouter loggedInUser={context} onSignOut={() => storeUser(null, setLoggedInUser)} />)}
+                  </UserContext.Consumer>} />
+            </Switch>
+          </BrowserRouter>}
+      </Suspense>
+    </UserContext.Provider>);
 }
 
 export default App;
